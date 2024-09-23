@@ -1,4 +1,4 @@
-import 'package:ecommerce/screens/room_inspiration_screen.dart';
+
 import 'package:ecommerce/screens/cart_screen.dart';
 import 'package:ecommerce/screens/categories_screen.dart';
 import 'package:ecommerce/screens/check_out_screen.dart';
@@ -34,9 +34,7 @@ class AppPages {
     GetPage(
         name: AppRoutes.PROFILE_SCREEN,
         page: () => ProfileScreen()), // تأكد من تطابق الاسم
-    GetPage(
-        name: AppRoutes.ROOM_INSPIRATION_SCREEN,
-        page: () => RoomInspirationScreen()), // تأكد من تطابق الاسم
+    
     GetPage(name: AppRoutes.CHECK_OUT_SCREEN, page: () => CheckoutScreen()),
     GetPage(
         name: AppRoutes.PRODUCTS_DETAILS_SCREEN,

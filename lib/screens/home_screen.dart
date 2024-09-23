@@ -1,5 +1,5 @@
 import 'package:ecommerce/routes/app_routes.dart';
-import 'package:ecommerce/screens/Room_Inspiration_screen.dart';
+
 import 'package:ecommerce/screens/cart_screen.dart';
 import 'package:ecommerce/screens/categories_screen.dart';
 import 'package:ecommerce/screens/favorites_screen.dart';
@@ -21,6 +21,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _page = 2; // الصفحة الافتراضية هي الصفحة الرئيسية
+  DateTime? lastPressed; // لتتبع آخر مرة تم فيها الضغط على زر الرجوع
 
   final List<Widget> _pages = [
     CategoriesScreen(),
@@ -42,11 +43,29 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
+        // إذا كان المستخدم في الصفحة الرئيسية
         if (_page == 2) {
-          SystemNavigator.pop(); // الخروج من التطبيق عند الضغط على زر الرجوع
-          return false;
+          DateTime now = DateTime.now();
+          if (lastPressed == null ||
+              now.difference(lastPressed!) > Duration(seconds: 2)) {
+            // إذا كانت هذه أول مرة يضغط فيها على زر الرجوع أو مر أكثر من ثانيتين منذ آخر ضغطة
+            lastPressed = now;
+
+            // عرض رسالة في الأسفل تقول "اضغط مرة أخرى للخروج"
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('اضغط مرة أخرى للخروج'),
+                duration: Duration(seconds: 2),
+              ),
+            );
+            return false; // منع الخروج من التطبيق
+          } else {
+            // إذا ضغط مرتين خلال ثانيتين، أخرج من التطبيق
+            SystemNavigator.pop(); // الخروج من التطبيق
+            return false;
+          }
         }
-        return true;
+        return true; // السماح بالعودة إلى الصفحة السابقة
       },
       child: Scaffold(
         appBar: _page == 2
@@ -173,13 +192,6 @@ class HomePageAppBar extends StatelessWidget implements PreferredSizeWidget {
               ),
               const Divider(),
               // خيارات أخرى
-              ListTile(
-                leading: const Icon(Icons.settings),
-                title: const Text('Other Settings'),
-                onTap: () {
-                  Get.back(); // إغلاق الـ Dialog
-                },
-              ),
             ],
           ),
           actions: [
@@ -256,6 +268,12 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _currentIndex = 0; // لتتبع الفهرس الحالي في الـ Carousel
   int selectedCategoryIndex = 0;
+  final List<String> topCarouselImages = [
+    'https://images.pexels.com/photos/716738/pexels-photo-716738.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    'https://images.pexels.com/photos/6115040/pexels-photo-6115040.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    'https://images.pexels.com/photos/7317346/pexels-photo-7317346.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+    'https://images.pexels.com/photos/5650026/pexels-photo-5650026.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+  ];
   final List<String> carouselImages = [
     'https://images.pexels.com/photos/279652/pexels-photo-279652.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     'https://images.pexels.com/photos/923192/pexels-photo-923192.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
@@ -272,6 +290,45 @@ class _HomePageState extends State<HomePage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          CarouselSlider(
+            items: topCarouselImages.map((image) {
+              return Container(
+                margin: const EdgeInsets.symmetric(horizontal: 7.0),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(15.0),
+                  child: CachedNetworkImage(
+                    imageUrl: image,
+                    fit: BoxFit.cover,
+                    width: double.infinity,
+                    height: 174, // الارتفاع المحدد للصورة
+                    placeholder: (context, url) => const SizedBox(
+                      width: 30,
+                      height: 30,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2.0,
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
+                      ),
+                    ),
+                    errorWidget: (context, url, error) =>
+                        const Icon(Icons.error),
+                  ),
+                ),
+              );
+            }).toList(),
+            options: CarouselOptions(
+              height: 174,
+              autoPlay: true,
+              autoPlayInterval: const Duration(seconds: 4),
+              enlargeCenterPage: true,
+              viewportFraction: 0.9,
+              onPageChanged: (index, reason) {
+                setState(() {
+                  _currentIndex = index;
+                });
+              },
+            ),
+          ),
+
           const SizedBox(height: 10),
           RichText(
             textAlign: TextAlign.center,
@@ -394,65 +451,6 @@ class _HomePageState extends State<HomePage> {
               ),
             ],
           ),
-          Column(
-            children: [
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 28, vertical: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      'Inspiration by Room',
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        Get.to(RoomInspirationScreen());
-                      },
-                      child: const Text(
-                        'View All',
-                        style: TextStyle(color: Colors.orange),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          // Image with rounded corners and navigation
-          GestureDetector(
-            onTap: () {
-              Get.toNamed(AppRoutes.PRODUCTS_SCREEN,
-                  parameters: {'category': 'Sofas'});
-            },
-            child: Container(
-              margin: const EdgeInsets.symmetric(
-                  horizontal: 28.0, vertical: 5.0), // البادينغ حول الصورة
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(15.0),
-                child: CachedNetworkImage(
-                  imageUrl:
-                      'https://images.pexels.com/photos/198272/pexels-photo-198272.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-                  fit: BoxFit.cover,
-                  width: double.infinity,
-                  height: 174, // الارتفاع المحدد للصورة
-                  placeholder: (context, url) => const SizedBox(
-                    width: 30,
-                    height: 30,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2.0,
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
-                    ),
-                  ),
-                  errorWidget: (context, url, error) => const Icon(Icons.error),
-                ),
-              ),
-            ),
-          ),
-
-          // Inspiration by Room مع زر View All
 
           // Categories
           Padding(

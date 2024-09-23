@@ -12,7 +12,7 @@ class AppRoutes {
   static const PROFILE_SCREEN = '/profile'; // تم تعديل الاسم ليتطابق مع AppPages
   static const FAVORITES_SCREEN = '/favorites'; // تم تعديل الاسم ليتطابق مع AppPages
   static const PRODUCTS_SCREEN = '/products'; // تم تعديل الاسم ليتطابق مع AppPages
-  static const ROOM_INSPIRATION_SCREEN = '/room_inspiration'; // تم تعديل الاسم ليتطابق مع AppPages
+  
   static const CHECK_OUT_SCREEN = '/checkout';
   static const PRODUCTS_DETAILS_SCREEN = '/product_details'; // تم تعديل الاسم ليتطابق مع AppPages
 }

@@ -1,8 +1,7 @@
-// lib/screens/cart_screen.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ecommerce/controllers/cart_controller.dart';
-import 'package:ecommerce/screens/check_out_screen.dart';
+import 'package:ecommerce/routes/app_routes.dart';
 
 class CartScreen extends StatelessWidget {
   @override
@@ -20,40 +19,129 @@ class CartScreen extends StatelessWidget {
             child: Text('Your cart is empty'),
           );
         } else {
-          return ListView.builder(
-            itemCount: cartController.cartItems.length,
-            itemBuilder: (context, index) {
-              final item = cartController.cartItems[index];
-              return ListTile(
-                leading: Image.network(item.imageUrl), // Assuming the `Product` model has an imageUrl field
-                title: Text(item.name),
-                subtitle: Text('Price: \$${item.price}'),
-                trailing: IconButton(
-                  icon: const Icon(Icons.delete),
-                  onPressed: () {
-                    cartController.removeItem(item);
+          return Column(
+            children: [
+              Expanded(
+                child: ListView.builder(
+                  itemCount: cartController.cartItems.length,
+                  itemBuilder: (context, index) {
+                    final item = cartController.cartItems[index];
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Card(
+                        elevation: 2,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: Row(
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(15),
+                              child: Image.network(
+                                item.imageUrl,
+                                width: 100,
+                                height: 100,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    item.name,
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Text(
+                                    '\$${item.price}',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.delete),
+                              onPressed: () {
+                                cartController.removeItem(item);
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
                   },
                 ),
-              );
-            },
+              ),
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildPriceRow('Sub total :', cartController.subTotal),
+                    _buildPriceRow('Shipping :', cartController.shipping),
+                    Divider(),
+                    _buildPriceRow('Cart Total :', cartController.cartTotal),
+                    const SizedBox(height: 10),
+                    ElevatedButton(
+                      onPressed: () {
+                        Get.toNamed(AppRoutes.CHECK_OUT_SCREEN);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 15,
+                        ),
+                        backgroundColor: Colors.orange,
+                      ),
+                      child: Center(
+                        child: const Text(
+                          'Checkout',
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           );
         }
       }),
-      bottomNavigationBar: Obx(() {
-        if (cartController.cartItems.isNotEmpty) {
-          return Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: ElevatedButton(
-              onPressed: () {
-                Get.to(() => CheckoutScreen());
-              },
-              child: const Text('Proceed to Checkout'),
+    );
+  }
+
+  Widget _buildPriceRow(String label, double amount) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 2.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 16,
+              color: Colors.grey,
             ),
-          );
-        } else {
-          return SizedBox.shrink();
-        }
-      }),
+          ),
+          Text(
+            '\$${amount.toStringAsFixed(2)}',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

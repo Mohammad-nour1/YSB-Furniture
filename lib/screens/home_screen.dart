@@ -1,3 +1,5 @@
+import 'package:ecommerce/data/products_data_screen.dart';
+import 'package:ecommerce/models/product.dart';
 import 'package:ecommerce/routes/app_routes.dart';
 
 import 'package:ecommerce/screens/cart_screen.dart';
@@ -268,6 +270,9 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _currentIndex = 0; // لتتبع الفهرس الحالي في الـ Carousel
   int selectedCategoryIndex = 0;
+
+  String selectedCategory = 'Sofas'; // الفئة المختارة
+
   final List<String> topCarouselImages = [
     'https://images.pexels.com/photos/716738/pexels-photo-716738.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     'https://images.pexels.com/photos/6115040/pexels-photo-6115040.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
@@ -280,6 +285,7 @@ class _HomePageState extends State<HomePage> {
     'https://images.pexels.com/photos/7195558/pexels-photo-7195558.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     'https://images.pexels.com/photos/191703/pexels-photo-191703.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
   ];
+  final List<String> categories = ['Sofas', 'Chairs', 'Tables', 'Clocks'];
 
   @override
   Widget build(BuildContext context) {
@@ -465,40 +471,148 @@ class _HomePageState extends State<HomePage> {
           ),
           SizedBox(
             height: 58,
-            // ارتفاع العرض للتمرير الأفقي
             child: ListView(
               padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 10),
               scrollDirection: Axis.horizontal,
-              children: [
-                _buildCategoryButton('Sofas', 'Sofas'),
-                _buildCategoryButton('Chairs', 'Chairs'),
-                _buildCategoryButton('Tables', 'Tables'),
-                _buildCategoryButton('Clocks', 'Clocks'),
-              ],
+              children: List.generate(categories.length, (index) {
+                return _buildCategoryButton(categories[index], index);
+              }),
             ),
           ),
+
+          // قائمة المنتجات بناءً على الفئة المختارة
+          _buildProductList(),
         ],
       ),
     );
   }
 
-  Widget _buildCategoryButton(String label, String category) {
+  // بناء زر الفئة
+  Widget _buildCategoryButton(String label, int index) {
+    bool isSelected = selectedCategoryIndex == index;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4),
       child: ElevatedButton(
         onPressed: () {
-          Get.toNamed(AppRoutes.PRODUCTS_SCREEN,
-              parameters: {'category': category});
+          setState(() {
+            selectedCategoryIndex = index;
+            selectedCategory = label;
+          });
         },
         style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.orange,
+          backgroundColor: isSelected ? Colors.orangeAccent : Colors.orange,
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         ),
         child: Text(
           label,
           style: TextStyle(
             color: Colors.white,
+            fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
           ),
+        ),
+      ),
+    );
+  }
+
+  // بناء قائمة المنتجات
+  Widget _buildProductList() {
+    // تصفية المنتجات بناءً على الفئة المختارة
+    final filteredProducts = products
+        .where((product) => product.category == selectedCategory)
+        .toList();
+
+    return SizedBox(
+      height: 400, // يمكنك ضبط الارتفاع حسب الحاجة
+      child: ListView.builder(
+        itemCount: filteredProducts.length,
+        itemBuilder: (context, index) {
+          final product = filteredProducts[index];
+          return _buildProductItem(product);
+        },
+      ),
+    );
+  }
+
+  // بناء عنصر المنتج
+  Widget _buildProductItem(Product product) {
+    final FavoritesController favoritesController =
+        Get.find<FavoritesController>();
+
+    return GestureDetector(
+      onTap: () {
+        Get.toNamed(AppRoutes.PRODUCTS_DETAILS_SCREEN, arguments: product);
+      },
+      child: Container(
+        margin: const EdgeInsets.all(32.0),
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: NetworkImage(product.imageUrl),
+            fit: BoxFit.cover,
+          ),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        height: 130,
+        child: Stack(
+          children: [
+            Positioned(
+              bottom: 10,
+              left: 10,
+              right: 10,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    product.name,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      shadows: [
+                        Shadow(
+                          blurRadius: 5.0,
+                          color: Colors.black.withOpacity(0.5),
+                          offset: Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        '\$${product.price}',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          shadows: [
+                            Shadow(
+                              blurRadius: 5.0,
+                              color: Colors.black.withOpacity(0.5),
+                              offset: Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                      Obx(() {
+                        bool isFavorite =
+                            favoritesController.isFavorite(product);
+                        return IconButton(
+                          icon: Icon(
+                            isFavorite ? Icons.favorite : Icons.favorite_border,
+                            color: const Color.fromARGB(213, 244, 44, 44),
+                          ),
+                          onPressed: () {
+                            favoritesController.toggleFavorite(product);
+                          },
+                        );
+                      }),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );

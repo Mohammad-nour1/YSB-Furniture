@@ -8,11 +8,11 @@ class AppRoutes {
   static const HOME_SCREEN = '/';
   static const CART_SCREEN = '/cart';
   static const SEARCH_SCREEN = '/search';
-  static const CATEGORIES_SCREEN = '/categories'; // تم تعديل الاسم ليتطابق مع AppPages
-  static const PROFILE_SCREEN = '/profile'; // تم تعديل الاسم ليتطابق مع AppPages
-  static const FAVORITES_SCREEN = '/favorites'; // تم تعديل الاسم ليتطابق مع AppPages
-  static const PRODUCTS_SCREEN = '/products'; // تم تعديل الاسم ليتطابق مع AppPages
+  static const CATEGORIES_SCREEN = '/categories';  
+  static const PROFILE_SCREEN = '/profile';  
+  static const FAVORITES_SCREEN = '/favorites';   
+  static const PRODUCTS_SCREEN = '/products';   
   
   static const CHECK_OUT_SCREEN = '/checkout';
-  static const PRODUCTS_DETAILS_SCREEN = '/product_details'; // تم تعديل الاسم ليتطابق مع AppPages
+  static const PRODUCTS_DETAILS_SCREEN = '/product_details'; 
 }

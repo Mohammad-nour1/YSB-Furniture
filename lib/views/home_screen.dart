@@ -1,13 +1,16 @@
-import 'package:ecommerce/data/products_data_screen.dart';
-import 'package:ecommerce/models/product.dart';
+import 'package:ecommerce/controllers/category_controller.dart';
+import 'package:ecommerce/controllers/mostsold_products_controller.dart';
+import 'package:ecommerce/models/category.dart';
+import 'package:ecommerce/models/favorite.dart';
+import 'package:ecommerce/models/productdetails.dart';
 import 'package:ecommerce/routes/app_routes.dart';
 
-import 'package:ecommerce/screens/cart_screen.dart';
-import 'package:ecommerce/screens/categories_screen.dart';
-import 'package:ecommerce/screens/favorites_screen.dart';
-import 'package:ecommerce/screens/product_screen.dart';
-import 'package:ecommerce/screens/profile_screen.dart';
-import 'package:ecommerce/screens/search_screen.dart';
+import 'package:ecommerce/views/cart_screen.dart';
+import 'package:ecommerce/views/categories_screen.dart';
+import 'package:ecommerce/views/favorites_screen.dart';
+import 'package:ecommerce/views/product_screen.dart';
+import 'package:ecommerce/views/profile_screen.dart';
+import 'package:ecommerce/views/search_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter/services.dart';
@@ -27,9 +30,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   final List<Widget> _pages = [
     CategoriesScreen(),
-    FavoritesScreen(),
+    const FavoritesScreen(),
     HomePage(), // الصفحة الرئيسية التي تضم الكاروسيل والخصومات
-    CartScreen(),
+    const CartScreen(),
     ProfileScreen(),
   ];
 
@@ -49,13 +52,13 @@ class _HomeScreenState extends State<HomeScreen> {
         if (_page == 2) {
           DateTime now = DateTime.now();
           if (lastPressed == null ||
-              now.difference(lastPressed!) > Duration(seconds: 2)) {
+              now.difference(lastPressed!) > const Duration(seconds: 2)) {
             // إذا كانت هذه أول مرة يضغط فيها على زر الرجوع أو مر أكثر من ثانيتين منذ آخر ضغطة
             lastPressed = now;
 
             // عرض رسالة في الأسفل تقول "اضغط مرة أخرى للخروج"
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
+              const SnackBar(
                 content: Text('اضغط مرة أخرى للخروج'),
                 duration: Duration(seconds: 2),
               ),
@@ -156,7 +159,7 @@ class HomePageAppBar extends StatelessWidget implements PreferredSizeWidget {
         IconButton(
           icon: const Icon(Icons.shopping_cart),
           onPressed: () {
-            Get.to(CartScreen());
+            Get.to(const CartScreen());
           },
         ),
       ],
@@ -173,35 +176,38 @@ class HomePageAppBar extends StatelessWidget implements PreferredSizeWidget {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              // خيار تغيير الثيم
+              
               ListTile(
                 leading: const Icon(Icons.brightness_6_outlined),
-                title: const Text('Theme'),
+                title: const Text('Themes'),
                 onTap: () {
-                  Get.back(); // إغلاق الـ Dialog
-                  _showThemeChangeDialog(context); // عرض خيارات تغيير الثيم
+                  Get.back(); 
+                  _showThemeChangeDialog(context); 
                 },
               ),
-              const Divider(),
-              // خيار تغيير اللغة
-              ListTile(
-                leading: const Icon(Icons.language),
-                title: const Text('Language'),
-                onTap: () {
-                  // يمكنك إضافة خيارات تغيير اللغة هنا
-                  Get.back(); // إغلاق الـ Dialog
-                },
+              const Divider(
+                color: Colors.orange,
+                thickness: 3, 
               ),
-              const Divider(),
-              // خيارات أخرى
             ],
           ),
           actions: [
             TextButton(
-              child: const Text('Cancel'),
               onPressed: () {
-                Get.back(); // إغلاق الـ Dialog
+                Get.back(); 
               },
+              style: TextButton.styleFrom(
+                backgroundColor: Colors.orange,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0), 
+                ),
+              ),
+              child: const Text(
+                'Cancel',
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
             ),
           ],
         );
@@ -209,7 +215,7 @@ class HomePageAppBar extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 
-  // دالة لعرض خيارات تغيير الثيم
+
   void _showThemeChangeDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -227,11 +233,14 @@ class HomePageAppBar extends StatelessWidget implements PreferredSizeWidget {
                     : const Icon(Icons.check, color: Colors.green),
                 onTap: () {
                   Get.changeThemeMode(
-                      ThemeMode.light); // تغيير الثيم إلى الوضع النهاري
-                  Get.back(); // إغلاق الـ Dialog
+                      ThemeMode.light); 
+                  Get.back(); 
                 },
               ),
-              const Divider(),
+              const Divider(
+                color: Colors.orange,
+                thickness: 3,
+              ),
               ListTile(
                 leading:
                     const Icon(Icons.nightlight_round, color: Colors.blueGrey),
@@ -241,18 +250,29 @@ class HomePageAppBar extends StatelessWidget implements PreferredSizeWidget {
                     : null,
                 onTap: () {
                   Get.changeThemeMode(
-                      ThemeMode.dark); // تغيير الثيم إلى الوضع الليلي
-                  Get.back(); // إغلاق الـ Dialog
+                      ThemeMode.dark); 
+                  Get.back(); 
                 },
               ),
             ],
           ),
           actions: [
             TextButton(
-              child: const Text('Cancel'),
               onPressed: () {
-                Get.back(); // إغلاق الـ Dialog
+                Get.back(); 
               },
+              style: TextButton.styleFrom(
+                backgroundColor: Colors.orange,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0), 
+                ),
+              ),
+              child: const Text(
+                'Cancel',
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
             ),
           ],
         );
@@ -261,18 +281,20 @@ class HomePageAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 }
 
-// الصفحة الرئيسية التي تحتوي على الكاروسيل
+
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  int _currentIndex = 0; // لتتبع الفهرس الحالي في الـ Carousel
+  int _currentIndex = 0; 
   int selectedCategoryIndex = 0;
 
-  String selectedCategory = 'Sofas'; // الفئة المختارة
-
+  String selectedCategory = 'Sofas'; 
+  final CategoryController categoryController = Get.put(CategoryController());
+  final MostSoldProductsController mostSoldProductsController =
+      Get.put(MostSoldProductsController());
   final List<String> topCarouselImages = [
     'https://images.pexels.com/photos/716738/pexels-photo-716738.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     'https://images.pexels.com/photos/6115040/pexels-photo-6115040.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
@@ -285,11 +307,11 @@ class _HomePageState extends State<HomePage> {
     'https://images.pexels.com/photos/7195558/pexels-photo-7195558.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
     'https://images.pexels.com/photos/191703/pexels-photo-191703.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
   ];
-  final List<String> categories = ['Sofas', 'Chairs', 'Tables', 'Clocks'];
+  
 
   @override
   Widget build(BuildContext context) {
-    // للتحقق من الوضع الداكن
+    
     bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     return SingleChildScrollView(
@@ -306,7 +328,7 @@ class _HomePageState extends State<HomePage> {
                     imageUrl: image,
                     fit: BoxFit.cover,
                     width: double.infinity,
-                    height: 174, // الارتفاع المحدد للصورة
+                    height: 174,
                     placeholder: (context, url) => const SizedBox(
                       width: 30,
                       height: 30,
@@ -406,7 +428,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
 
-              // إضافة النقاط أسفل الصور
+            
               Positioned(
                 bottom: 1,
                 left: 30,
@@ -432,7 +454,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
 
-              // الزر "Shop Now" تحت الصور
+              
               Positioned(
                 bottom: -2,
                 left: 0,
@@ -458,9 +480,8 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
 
-          // Categories
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
             child: Align(
               alignment: Alignment.centerLeft,
               child: Text(
@@ -471,32 +492,44 @@ class _HomePageState extends State<HomePage> {
           ),
           SizedBox(
             height: 58,
-            child: ListView(
-              padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 10),
-              scrollDirection: Axis.horizontal,
-              children: List.generate(categories.length, (index) {
-                return _buildCategoryButton(categories[index], index);
-              }),
-            ),
+            child: Obx(() {
+              if (categoryController.categories.isEmpty) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              return ListView(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 28, vertical: 10),
+                scrollDirection: Axis.horizontal,
+                children: List.generate(categoryController.categories.length,
+                    (index) {
+                  return _buildCategoryButton(
+                      categoryController.categories[index], index);
+                }),
+              );
+            }),
           ),
-
-          // قائمة المنتجات بناءً على الفئة المختارة
-          _buildProductList(),
+          Obx(() {
+            if (mostSoldProductsController.mostSoldProducts.isEmpty) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            return _buildProductList();
+          }),
         ],
       ),
     );
   }
 
-  // بناء زر الفئة
-  Widget _buildCategoryButton(String label, int index) {
-    bool isSelected = selectedCategoryIndex == index;
+  Widget _buildCategoryButton(Category category, int index) {
+    bool isSelected = selectedCategoryIndex ==
+        index; 
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4),
       child: ElevatedButton(
         onPressed: () {
           setState(() {
-            selectedCategoryIndex = index;
-            selectedCategory = label;
+            selectedCategoryIndex = index; 
+            selectedCategory = category.name;
           });
         },
         style: ElevatedButton.styleFrom(
@@ -504,7 +537,7 @@ class _HomePageState extends State<HomePage> {
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         ),
         child: Text(
-          label,
+          category.name, 
           style: TextStyle(
             color: Colors.white,
             fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
@@ -514,26 +547,22 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  // بناء قائمة المنتجات
   Widget _buildProductList() {
-    // تصفية المنتجات بناءً على الفئة المختارة
-    final filteredProducts = products
-        .where((product) => product.category == selectedCategory)
-        .toList();
-
     return SizedBox(
-      height: 400, // يمكنك ضبط الارتفاع حسب الحاجة
-      child: ListView.builder(
-        itemCount: filteredProducts.length,
-        itemBuilder: (context, index) {
-          final product = filteredProducts[index];
-          return _buildProductItem(product);
-        },
-      ),
+      height: 400,
+      child: Obx(() {
+        final filteredProducts = mostSoldProductsController.mostSoldProducts;
+        return ListView.builder(
+          itemCount: filteredProducts.length,
+          itemBuilder: (context, index) {
+            final product = filteredProducts[index];
+            return _buildProductItem(product as Product);
+          },
+        );
+      }),
     );
   }
 
-  // بناء عنصر المنتج
   Widget _buildProductItem(Product product) {
     final FavoritesController favoritesController =
         Get.find<FavoritesController>();
@@ -546,7 +575,7 @@ class _HomePageState extends State<HomePage> {
         margin: const EdgeInsets.all(32.0),
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: NetworkImage(product.imageUrl),
+            image: NetworkImage(product.mainImage),
             fit: BoxFit.cover,
           ),
           borderRadius: BorderRadius.circular(10),
@@ -571,7 +600,7 @@ class _HomePageState extends State<HomePage> {
                         Shadow(
                           blurRadius: 5.0,
                           color: Colors.black.withOpacity(0.5),
-                          offset: Offset(0, 2),
+                          offset: const Offset(0, 2),
                         ),
                       ],
                     ),
@@ -588,22 +617,23 @@ class _HomePageState extends State<HomePage> {
                             Shadow(
                               blurRadius: 5.0,
                               color: Colors.black.withOpacity(0.5),
-                              offset: Offset(0, 2),
+                              offset: const Offset(0, 2),
                             ),
                           ],
                         ),
                       ),
                       const SizedBox(width: 4),
                       Obx(() {
-                        bool isFavorite =
-                            favoritesController.isFavorite(product);
+                        bool isFavorite = favoritesController
+                            .isFavorite(product as FavoriteProduct);
                         return IconButton(
                           icon: Icon(
                             isFavorite ? Icons.favorite : Icons.favorite_border,
                             color: const Color.fromARGB(213, 244, 44, 44),
                           ),
                           onPressed: () {
-                            favoritesController.toggleFavorite(product);
+                            favoritesController
+                                .toggleFavorite(product as FavoriteProduct);
                           },
                         );
                       }),

@@ -1,4 +1,6 @@
+import 'package:ecommerce/services/search_service.dart';
 import 'package:flutter/material.dart';
+import 'package:ecommerce/models/productdetails.dart';
 
 class SearchScreen extends StatefulWidget {
   @override
@@ -6,10 +8,11 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-  // المتغيرات الخاصة بالفلترة
   List<String> selectedCategories = [];
-  RangeValues selectedPriceRange =
-      RangeValues(50, 300); // نطاق الأسعار الافتراضي
+  RangeValues selectedPriceRange = const RangeValues(50, 300);
+  List<Product> searchedProducts = [];
+  String searchQuery = '';
+  final SearchService searchService = SearchService();
 
   final List<String> categories = [
     'Livingroom',
@@ -20,30 +23,49 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final appBarColor = isDarkMode ? Colors.black : Colors.white;
+    final textColor = isDarkMode ? Colors.white : Colors.black;
+
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: appBarColor,
         elevation: 0,
-        title: const TextField(
+        title: TextField(
+          onChanged: (value) {
+            searchQuery = value;
+          },
           decoration: InputDecoration(
             hintText: 'Search Furniture...',
             border: InputBorder.none,
-            prefixIcon: Icon(Icons.search, color: Colors.black),
+            suffixIcon: IconButton(
+              icon: Icon(Icons.search, color: textColor),
+              onPressed: () async {
+                if (searchQuery.isNotEmpty) {
+                  try {
+                    searchedProducts =
+                        await searchService.searchProducts(searchQuery);
+                    setState(() {});
+                  } catch (e) {
+                    print(e);
+                  }
+                }
+              },
+            ),
           ),
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(color: textColor),
         ),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // الفئات المختارة
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Wrap(
               spacing: 8.0,
               children: categories.map((category) {
                 return FilterChip(
-                  label: Text(category),
+                  label: Text(category, style: TextStyle(color: textColor)),
                   selected: selectedCategories.contains(category),
                   onSelected: (bool selected) {
                     setState(() {
@@ -60,8 +82,6 @@ class _SearchScreenState extends State<SearchScreen> {
               }).toList(),
             ),
           ),
-
-          // نطاق الأسعار
           Padding(
             padding:
                 const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
@@ -70,7 +90,10 @@ class _SearchScreenState extends State<SearchScreen> {
               children: [
                 Text(
                   'Price Range',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                      color: textColor),
                 ),
                 RangeSlider(
                   values: selectedPriceRange,
@@ -92,22 +115,39 @@ class _SearchScreenState extends State<SearchScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('\$${selectedPriceRange.start.round()}'),
-                    Text('\$${selectedPriceRange.end.round()}'),
+                    Text('\$${selectedPriceRange.start.round()}',
+                        style: TextStyle(color: textColor)),
+                    Text('\$${selectedPriceRange.end.round()}',
+                        style: TextStyle(color: textColor)),
                   ],
                 ),
               ],
             ),
           ),
-
-          // النتيجة الفعلية (بدون منتجات)
           Expanded(
-            child: Center(
-              child: Text(
-                'No products to display, adjust filters to see results.',
-                style: TextStyle(color: Colors.grey, fontSize: 16),
-              ),
-            ),
+            child: searchedProducts.isNotEmpty
+                ? ListView.builder(
+                    itemCount: searchedProducts.length,
+                    itemBuilder: (context, index) {
+                      final product = searchedProducts[index];
+                      return ListTile(
+                        title: Text(product.name,
+                            style: TextStyle(color: textColor)),
+                        subtitle: Text('\$${product.price}',
+                            style: TextStyle(color: textColor)),
+                        leading: Image.network(product.mainImage),
+                        onTap: () {
+                         
+                        },
+                      );
+                    },
+                  )
+                : const Center(
+                    child: Text(
+                      'No products to display, adjust filters to see results.',
+                      style: TextStyle(color: Colors.grey, fontSize: 16),
+                    ),
+                  ),
           ),
         ],
       ),

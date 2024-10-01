@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:ecommerce/screens/categories_screen.dart';
-import 'package:ecommerce/screens/home_screen.dart';
+import 'package:ecommerce/views/categories_screen.dart';
+import 'package:ecommerce/views/home_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -45,11 +45,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             children: [
               TextField(
                 controller: titleController,
-                decoration: InputDecoration(labelText: 'Title'),
+                decoration: const InputDecoration(labelText: 'Title'),
               ),
               TextField(
                 controller: addressController,
-                decoration: InputDecoration(labelText: 'Address'),
+                decoration: const InputDecoration(labelText: 'Address'),
               ),
             ],
           ),
@@ -58,10 +58,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text(
+              child: const Text(
                 'Cancel',
                 style:
-                    TextStyle(color: const Color.fromARGB(255, 255, 132, 24)),
+                    TextStyle(color: Color.fromARGB(255, 255, 132, 24)),
               ),
             ),
             ElevatedButton(
@@ -83,7 +83,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               ),
               child: Text(
                 index == null ? 'Add' : 'Save',
-                style: TextStyle(color: Colors.white),
+                style: const TextStyle(color: Colors.white),
               ),
             ),
           ],
@@ -95,7 +95,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   void _navigateToCheckoutStep2() {
     if (addresses.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please add at least one address.')),
+        const SnackBar(content: Text('Please add at least one address.')),
       );
       return;
     }
@@ -113,7 +113,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.of(context).pop();
           },
@@ -138,7 +138,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               ),
             ),
             const SizedBox(height: 20),
-            // Display address cards
+          
             Expanded(
               child: ListView.builder(
                 itemCount: addresses.length,
@@ -148,11 +148,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       borderRadius: BorderRadius.circular(15),
                     ),
                     child: ListTile(
-                      leading: Icon(Icons.location_on),
+                      leading: const Icon(Icons.location_on),
                       title: Text(addresses[index]['title']!),
                       subtitle: Text(addresses[index]['address']!),
                       trailing: IconButton(
-                        icon: Icon(Icons.edit),
+                        icon: const Icon(Icons.edit),
                         onPressed: () {
                           _showAddAddressDialog(index: index);
                         },
@@ -162,7 +162,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 },
               ),
             ),
-            // Add New Address Button
+           
             Container(
               width: double.infinity,
               decoration: BoxDecoration(
@@ -179,7 +179,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               ),
             ),
             const SizedBox(height: 20),
-            // Continue Button
+            
             ElevatedButton(
               onPressed: _navigateToCheckoutStep2,
               style: ElevatedButton.styleFrom(
@@ -214,7 +214,7 @@ class CheckoutStep2Screen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.of(context).pop();
           },
@@ -238,16 +238,16 @@ class CheckoutStep2Screen extends StatelessWidget {
               ),
             ),
 
-            // Display payment card image
+          
             Container(
-              padding: EdgeInsets.all(22),
+              padding: const EdgeInsets.all(22),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(15),
                 child: CachedNetworkImage(
                   imageUrl:
                       "https://t3.ftcdn.net/jpg/05/74/43/12/240_F_574431210_icdpLDlDxAfsNacnV56vIWb4pCRnaNBA.jpg",
-                  placeholder: (context, url) => CircularProgressIndicator(),
-                  errorWidget: (context, url, error) => Icon(Icons.error),
+                  placeholder: (context, url) => const CircularProgressIndicator(),
+                  errorWidget: (context, url, error) => const Icon(Icons.error),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -261,7 +261,7 @@ class CheckoutStep2Screen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 10),
-            // Display address cards
+         
             Expanded(
               child: ListView.builder(
                 itemCount: addresses.length,
@@ -271,11 +271,11 @@ class CheckoutStep2Screen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(15),
                     ),
                     child: ListTile(
-                      leading: Icon(Icons.location_on),
+                      leading: const Icon(Icons.location_on),
                       title: Text(addresses[index]['title']!),
                       subtitle: Text(addresses[index]['address']!),
                       trailing: IconButton(
-                        icon: Icon(Icons.edit),
+                        icon: const Icon(Icons.edit),
                         onPressed: () {
                           showAddAddressDialog(index: index);
                         },
@@ -293,7 +293,7 @@ class CheckoutStep2Screen extends StatelessWidget {
               ),
             ),
             Container(
-              padding: EdgeInsets.all(10),
+              padding: const EdgeInsets.all(10),
               height: 110,
               child: ListView(
                 scrollDirection: Axis.horizontal,
@@ -341,7 +341,7 @@ class Succeeded extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.of(context).pop();
           },
@@ -357,7 +357,7 @@ class Succeeded extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(
+            const SizedBox(
               height: 180,
             ),
             Center(
@@ -376,15 +376,15 @@ class Succeeded extends StatelessWidget {
                       height: 60,
                       width: 60,
                     ),
-                    SizedBox(height: 10),
-                    Text(
+                    const SizedBox(height: 10),
+                    const Text(
                       'Order Success',
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: 18,
                       ),
                     ),
-                    Text(
+                    const Text(
                       'Your order XXXXX is completed\nPlease Check the delivery status\nat Order Tracking page',
                       style: TextStyle(
                         color: Colors.black,
@@ -397,7 +397,7 @@ class Succeeded extends StatelessWidget {
               ),
             ),
             const Spacer(),
-            // Continue Button
+          
             ElevatedButton(
               onPressed: () {
                 Navigator.pushReplacement(
@@ -428,7 +428,7 @@ class Succeeded extends StatelessWidget {
 Widget _buildPaymentCard(String cardName) {
   return Container(
     width: 120,
-    margin: EdgeInsets.all(6),
+    margin: const EdgeInsets.all(6),
     decoration: BoxDecoration(
       color: Colors.grey[200],
       borderRadius: BorderRadius.circular(15),

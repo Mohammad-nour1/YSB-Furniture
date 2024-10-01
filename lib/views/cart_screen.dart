@@ -4,6 +4,8 @@ import 'package:ecommerce/controllers/cart_controller.dart';
 import 'package:ecommerce/routes/app_routes.dart';
 
 class CartScreen extends StatelessWidget {
+  const CartScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     final CartController cartController = Get.find<CartController>();
@@ -38,7 +40,7 @@ class CartScreen extends StatelessWidget {
                             ClipRRect(
                               borderRadius: BorderRadius.circular(15),
                               child: Image.network(
-                                item.imageUrl,
+                                item.mainImage,
                                 width: 100,
                                 height: 100,
                                 fit: BoxFit.cover,
@@ -51,14 +53,14 @@ class CartScreen extends StatelessWidget {
                                 children: [
                                   Text(
                                     item.name,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                   Text(
                                     '\$${item.price}',
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontSize: 16,
                                       color: Colors.grey,
                                     ),
@@ -86,7 +88,7 @@ class CartScreen extends StatelessWidget {
                   children: [
                     _buildPriceRow('Sub total :', cartController.subTotal),
                     _buildPriceRow('Shipping :', cartController.shipping),
-                    Divider(),
+                    const Divider(),
                     _buildPriceRow('Cart Total :', cartController.cartTotal),
                     const SizedBox(height: 10),
                     ElevatedButton(
@@ -100,8 +102,8 @@ class CartScreen extends StatelessWidget {
                         ),
                         backgroundColor: Colors.orange,
                       ),
-                      child: Center(
-                        child: const Text(
+                      child: const Center(
+                        child: Text(
                           'Checkout',
                           style: TextStyle(
                             fontSize: 18,
@@ -128,14 +130,14 @@ class CartScreen extends StatelessWidget {
         children: [
           Text(
             label,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 16,
               color: Colors.grey,
             ),
           ),
           Text(
             '\$${amount.toStringAsFixed(2)}',
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
             ),

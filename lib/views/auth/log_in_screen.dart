@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../routes/app_routes.dart';
 
-class SignUpScreen extends StatelessWidget {
-  const SignUpScreen({Key? key});
+class LogInScreen extends StatelessWidget {
+  const LogInScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return GestureDetector(
       onTap: () {
         FocusScopeNode currentFocus = FocusScope.of(context);
@@ -25,15 +25,15 @@ class SignUpScreen extends StatelessWidget {
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
-                      Color.fromRGBO(243, 161, 80, 1),
-                      Color.fromRGBO(236, 255, 235, 187)
+                      Color.fromRGBO(66, 206, 248, 1),
+                      Color.fromRGBO(189, 224, 244, 0.992)
                     ],
                     begin: Alignment.bottomLeft,
                     end: Alignment.centerRight,
                   ),
                 ),
                 padding: const EdgeInsets.only(
-                    top: 28, right: 0, left: 20, bottom: 40),
+                    top: 32, right: 0, left: 20, bottom: 40),
                 width: double.infinity,
                 child: Stack(
                   children: [
@@ -41,7 +41,7 @@ class SignUpScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const SizedBox(
-                          height: 45,
+                          height: 32,
                         ),
                         Align(
                           alignment: Alignment.topLeft,
@@ -54,13 +54,13 @@ class SignUpScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 20),
                         const Text(
-                          'Create new  Account! ',
+                          'Welcome Back!',
                           style: TextStyle(fontSize: 20, color: Colors.black),
                           textAlign: TextAlign.left,
                         ),
                         const SizedBox(height: 10),
                         const Text(
-                          'Please fill in the form to continue',
+                          'Please sign in to your account',
                           style: TextStyle(
                             fontSize: 25,
                             color: Colors.black,
@@ -71,13 +71,13 @@ class SignUpScreen extends StatelessWidget {
                       ],
                     ),
                     Positioned(
-                      top: 20, // تحديد الموضع الرأسي للصورة
-                      left: 30, // تحديد الموضع الأفقي للصورة
+                      top: 20,
+                      left: 30,
                       child: Transform.translate(
                         offset: const Offset(65, -15),
                         child: Image.asset(
                           'assets/logos/cycle.png',
-                          color: Colors.orange,
+                          color: Colors.blue,
                           width: 250,
                           height: 250,
                         ),
@@ -86,19 +86,10 @@ class SignUpScreen extends StatelessWidget {
                   ],
                 ),
               ),
+              const SizedBox(height: 15), 
               Expanded(
                 child: ListView(
                   children: [
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20),
-                      child: TextField(
-                        decoration: InputDecoration(
-                          labelText: 'Full Name',
-                          border: OutlineInputBorder(),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 15),
                     const Padding(
                       padding: EdgeInsets.symmetric(horizontal: 20),
                       child: TextField(
@@ -108,18 +99,8 @@ class SignUpScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 15),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20),
-                      child: TextField(
-                        decoration: InputDecoration(
-                          labelText: 'Phone Number',
-                          border: OutlineInputBorder(),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 15),
-                    // Password TextField
+                    const SizedBox(height: 20),
+                 
                     const Padding(
                       padding: EdgeInsets.symmetric(horizontal: 20),
                       child: TextField(
@@ -131,11 +112,38 @@ class SignUpScreen extends StatelessWidget {
                         obscureText: true,
                       ),
                     ),
-                    const SizedBox(height: 30),
-
-                    // Sign In Button
+                    const SizedBox(height: 10),
+            
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 21),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 15,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              Checkbox(
+                                  value: false, onChanged: (bool? value) {}),
+                              const Text('Remember'),
+                            ],
+                          ),
+                          TextButton(
+                            onPressed: () {
+                         
+                            },
+                            child: const Text(
+                              'Forgot Password?',
+                              style: TextStyle(color: Colors.brown),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 23),
                       child: ElevatedButton(
                         onPressed: () {
                           Get.toNamed(AppRoutes.HOME_SCREEN);
@@ -147,27 +155,53 @@ class SignUpScreen extends StatelessWidget {
                           ),
                         ),
                         child: const Text(
-                          'Create Account',
+                          'Log in',
                           style: TextStyle(fontSize: 18, color: Colors.white),
                         ),
                       ),
                     ),
-
+                    const SizedBox(height: 10),
+                    const Text('OR',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 16, color: Colors.grey)),
+                    const SizedBox(height: 10),
+             
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 23),
+                      child: ElevatedButton.icon(
+                        onPressed: () {
+                    
+                        },
+                        icon: Image.asset('assets/logos/google.png', width: 24),
+                        label: const Text('Sign In with Google',
+                            style: TextStyle(fontSize: 14)),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor:
+                              const Color.fromRGBO(242, 232, 222, 1),
+                          foregroundColor: Colors.black,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 5),
+                 
                     TextButton(
                       onPressed: () {
-                        Get.toNamed(AppRoutes.LOGIN);
+                        Get.toNamed(AppRoutes.SIGNUP);
                       },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            "Have an Account? ",
+                            "Don't Have an Account? ",
                             style: TextStyle(
                               color: isDarkMode ? Colors.white : Colors.black,
                             ),
                           ),
                           const Text(
-                            "log in",
+                            "Sign Up",
                             style: TextStyle(
                               color: Colors.orange,
                             ),

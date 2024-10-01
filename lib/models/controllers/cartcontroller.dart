@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 
 class CartController extends GetxController {
-  var cartItems = <String>[].obs; // قائمة المنتجات في السلة
+  var cartItems = <String>[].obs;    
 
   void addItem(String product) {
     cartItems.add(product);

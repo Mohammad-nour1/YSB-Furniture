@@ -1,35 +1,31 @@
-class Product {
+
+
+class Category {
   final String id;
   final String name;
   final String imageUrl;
-  final double price;
-  final String category;
 
-  Product({
+  Category({
     required this.id,
     required this.name,
     required this.imageUrl,
-    required this.price,
-    required this.category,
   });
 
-  factory Product.fromJson(Map<String, dynamic> json) {
-    return Product(
+  
+  factory Category.fromJson(Map<String, dynamic> json) {
+    return Category(
       id: json['id'],
       name: json['name'],
       imageUrl: json['imageUrl'],
-      price: json['price'],
-      category: json['category'],
     );
   }
 
+  
   Map<String, dynamic> toJson() {
     return {
       'id': id,
       'name': name,
       'imageUrl': imageUrl,
-      'price': price,
-      'category': category,
     };
   }
 }

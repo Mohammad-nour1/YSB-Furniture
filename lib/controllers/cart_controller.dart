@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:ecommerce/models/product.dart';
+import 'package:ecommerce/models/productdetails.dart';
 
 class CartController extends GetxController {
   var cartItems = <Product>[].obs;
@@ -12,12 +12,11 @@ class CartController extends GetxController {
     cartItems.remove(product);
   }
 
-  // Define a getter for the subtotal
   double get subTotal => cartItems.fold(0, (sum, item) => sum + item.price);
 
-  // Define a fixed shipping cost or calculate it as needed
-  double get shipping => 5.85; // Example fixed shipping cost
 
-  // Define a getter for the total cost
+  double get shipping => 5.85; 
+
+  
   double get cartTotal => subTotal + shipping;
 }

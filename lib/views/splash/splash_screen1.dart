@@ -55,7 +55,7 @@ class _SplashScreen1State extends State<SplashScreen1> {
                 children: [
                   Transform.translate(
                     offset: const Offset(
-                        -10, -45), // تحريك الصورة إلى الأعلى بمقدار 35 بكسل
+                        -10, -45),  
                     child: Image.asset(
                       'assets/logos/lin.png',
                       color: Colors.orange,
@@ -105,10 +105,10 @@ class _SplashScreen1State extends State<SplashScreen1> {
                 .toList(),
           ),
           Align(
-            alignment: Alignment.centerLeft, // Align dots to the left
+            alignment: Alignment.centerLeft, 
             child: Padding(
               padding:
-                  const EdgeInsets.only(left: 36.0), // Add 5 pixel left padding
+                  const EdgeInsets.only(left: 36.0), 
               child: Row(
                 children: imgList.map((url) {
                   int index = imgList.indexOf(url);
@@ -146,7 +146,7 @@ class _SplashScreen1State extends State<SplashScreen1> {
                   },
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.all(
-                        12), // Increase padding for larger button
+                        12), 
                     shape: const CircleBorder(),
                     backgroundColor: Colors.orange,
                     elevation: 7,

@@ -1,10 +1,9 @@
 import 'package:get/get.dart';
 
 class MySearchController extends GetxController {
-  var query = ''.obs; // مراقبة المدخلات
+  var query = ''.obs;
 
   void updateQuery(String newQuery) {
     query.value = newQuery;
-    // يمكن إضافة منطق البحث هنا
   }
 }

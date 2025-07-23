@@ -19,7 +19,6 @@ class CategoryService {
     }
   }
 
-  // Add a new category to the API
   Future<void> addCategory(Category category) async {
     final response = await http.post(
       Uri.parse(_baseUrl),
@@ -32,7 +31,6 @@ class CategoryService {
     }
   }
 
-  // Update an existing category in the API
   Future<void> updateCategory(Category category) async {
     final response = await http.put(
       Uri.parse('$_baseUrl/${category.id}'),
@@ -45,7 +43,6 @@ class CategoryService {
     }
   }
 
-  // Delete a category from the API
   Future<void> deleteCategory(String id) async {
     final response = await http.delete(Uri.parse('$_baseUrl/$id'));
 

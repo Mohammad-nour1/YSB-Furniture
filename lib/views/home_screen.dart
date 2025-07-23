@@ -8,7 +8,6 @@ import 'package:ecommerce/routes/app_routes.dart';
 import 'package:ecommerce/views/cart_screen.dart';
 import 'package:ecommerce/views/categories_screen.dart';
 import 'package:ecommerce/views/favorites_screen.dart';
-import 'package:ecommerce/views/product_screen.dart';
 import 'package:ecommerce/views/profile_screen.dart';
 import 'package:ecommerce/views/search_screen.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +16,7 @@ import 'package:flutter/services.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:ecommerce/controllers/favorites_controller.dart'; // تأكد من إضافة المسار الصحيح
+import 'package:ecommerce/controllers/favorites_controller.dart'; 
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -25,13 +24,12 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _page = 2; // الصفحة الافتراضية هي الصفحة الرئيسية
-  DateTime? lastPressed; // لتتبع آخر مرة تم فيها الضغط على زر الرجوع
-
+  int _page = 2;
+  DateTime? lastPressed; 
   final List<Widget> _pages = [
     CategoriesScreen(),
     const FavoritesScreen(),
-    HomePage(), // الصفحة الرئيسية التي تضم الكاروسيل والخصومات
+    HomePage(), 
     const CartScreen(),
     ProfileScreen(),
   ];
@@ -39,7 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final List<PreferredSizeWidget> _appBars = [
     AppBar(title: const Text('Categories')),
     AppBar(title: const Text('Favorites')),
-    HomePageAppBar(), // AppBar لصفحة Home
+    HomePageAppBar(), 
     AppBar(title: const Text('Cart')),
     AppBar(title: const Text('Profile')),
   ];
@@ -48,35 +46,31 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        // إذا كان المستخدم في الصفحة الرئيسية
         if (_page == 2) {
           DateTime now = DateTime.now();
           if (lastPressed == null ||
               now.difference(lastPressed!) > const Duration(seconds: 2)) {
-            // إذا كانت هذه أول مرة يضغط فيها على زر الرجوع أو مر أكثر من ثانيتين منذ آخر ضغطة
             lastPressed = now;
 
-            // عرض رسالة في الأسفل تقول "اضغط مرة أخرى للخروج"
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text('اضغط مرة أخرى للخروج'),
                 duration: Duration(seconds: 2),
               ),
             );
-            return false; // منع الخروج من التطبيق
+            return false; 
           } else {
-            // إذا ضغط مرتين خلال ثانيتين، أخرج من التطبيق
-            SystemNavigator.pop(); // الخروج من التطبيق
+            SystemNavigator.pop(); 
             return false;
           }
         }
-        return true; // السماح بالعودة إلى الصفحة السابقة
+        return true;
       },
       child: Scaffold(
         appBar: _page == 2
             ? _appBars[_page]
-            : null, // إظهار الـ AppBar فقط في الصفحة الرئيسية
-        body: _pages[_page], // عرض الصفحة المناسبة
+            : null, 
+        body: _pages[_page], 
         bottomNavigationBar: CurvedNavigationBar(
           index: _page,
           height: 50.0,
@@ -94,7 +88,7 @@ class _HomeScreenState extends State<HomeScreen> {
           onTap: (index) {
             if (index >= 0 && index < _pages.length) {
               setState(() {
-                _page = index; // تغيير الصفحة بناءً على التاب المختارة
+                _page = index; 
               });
             }
           },
@@ -105,7 +99,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-// AppBar خاص بالصفحة الرئيسية
 class HomePageAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
@@ -119,7 +112,6 @@ class HomePageAppBar extends StatelessWidget implements PreferredSizeWidget {
       leading: IconButton(
         icon: const Icon(Icons.menu),
         onPressed: () {
-          // عرض قائمة الإعدادات
           showModalBottomSheet(
             context: context,
             shape: const RoundedRectangleBorder(
@@ -131,15 +123,14 @@ class HomePageAppBar extends StatelessWidget implements PreferredSizeWidget {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    // زر الإعدادات
                     ListTile(
                       leading:
                           const Icon(Icons.settings, color: Colors.blueGrey),
                       title: const Text('Settings',
                           style: TextStyle(fontWeight: FontWeight.bold)),
                       onTap: () {
-                        Navigator.pop(context); // إغلاق القائمة
-                        _showSettingsDialog(context); // عرض قائمة الإعدادات
+                        Navigator.pop(context); 
+                        _showSettingsDialog(context); 
                       },
                     ),
                   ],
@@ -166,7 +157,6 @@ class HomePageAppBar extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 
-  // دالة لعرض قائمة الإعدادات
   void _showSettingsDialog(BuildContext context) {
     showDialog(
       context: context,
